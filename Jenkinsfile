@@ -1,11 +1,15 @@
 pipeline {
-  agent any
-  stages {
+   agent any
+   stages {
+    stage('Checkout') {
+        steps {
+           git credentialsId: 'jenkins-user-github', url: 'https://github.com/altbran/spring-boot-jpetstore.git'
+        }
+    }
     stage('Build') {
-      agent any
-      steps {
-        sh './gradlew build'
-      }
+        steps {
+            sh './gradlew build jacocoTestReport'
+        }
     }
 
     stage('Test') {
@@ -13,12 +17,10 @@ pipeline {
         sh './gradlew clean test'
       }
     }
-
     stage('Analyze') {
-      steps {
-        sh './gradlew sonarqube -Dsonar.host.url=172.19.0.3:9000'
-      }
+        steps {
+            sh './gradlew sonarqube -Dsonar.host.url=http://sonarqube:9000'
+        }
     }
-
-  }
+   }
 }
