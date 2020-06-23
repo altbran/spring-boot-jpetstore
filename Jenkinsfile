@@ -26,5 +26,11 @@ pipeline {
       }
     }
 
+    stage('Report') {
+      steps {
+        sh 'echo "JACOCO tests report: ${BUILD_URL}/build/reports/jacoco/test/html/index.html"'
+      }
+    }
+
   }
 }
