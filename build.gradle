@@ -5,7 +5,7 @@ plugins {
     id "org.springframework.boot" version "1.5.22.RELEASE"
     id "org.seasar.doma.compile" version "1.0.0"
     id "org.sonarqube" version "3.0"
-    id 'jacoco'
+    id "jacoco"
 }
 
 version = "2.36.0-beta-1"
@@ -27,6 +27,39 @@ springBoot {
     mainClass = "sample.Application"
 }
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://repo.spring.io/milestone" }
+}
+
+dependencies {
+    annotationProcessor("org.seasar.doma:doma-processor:${dependentVersion}")
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.3.0.RC1'
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.seasar.doma:doma-core:${dependentVersion}")
+    implementation("org.seasar.doma.boot:doma-spring-boot-starter:${domaSpringBootVersion}")
+    implementation("com.h2database:h2")
+    implementation("org.webjars:jquery:2.1.1")
+    compileOnly("org.springframework.boot:spring-boot-devtools")
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.0.RC1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.3.3'
+
+    //Agregado esto para poder usar JUnit3-4 y probar con el framework de JUnit5
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testCompileOnly 'junit:junit:4.13'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
 sonarqube {
     properties {
         property "sonar.sourceEncoding", "UTF-8"
@@ -39,26 +72,6 @@ subprojects {
             property "sonar.sources", "src"
         }
     }
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-    maven { url "https://repo.spring.io/milestone" }
-}
-
-dependencies {
-    annotationProcessor("org.seasar.doma:doma-processor:${dependentVersion}")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.seasar.doma:doma-core:${dependentVersion}")
-    implementation("org.seasar.doma.boot:doma-spring-boot-starter:${domaSpringBootVersion}")
-    implementation("com.h2database:h2")
-    implementation("org.webjars:jquery:2.1.1")
-    compileOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("junit:junit")
 }
 
 eclipse {
