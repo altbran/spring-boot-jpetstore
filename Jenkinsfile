@@ -27,9 +27,24 @@ pipeline {
     }
 
     stage('Report') {
-      steps {
-        sh 'echo "JACOCO tests report: ${BUILD_URL}build/reports/jacoco/test/html/index.html"'
-      }
+        steps {
+            publishHTML([
+                allowMissing: false, 
+                alwaysLinkToLastBuild: false, 
+                keepAll: true, 
+                reportDir: 'build/reports/jacoco/test/html', 
+                reportFiles: 'index.html', 
+                reportName: 'JaCocoClassesReport', 
+            ])
+            publishHTML([
+                allowMissing: false, 
+                alwaysLinkToLastBuild: false, 
+                keepAll: true, 
+                reportDir: 'build/reports/tests/test', 
+                reportFiles: 'index.html', 
+                reportName: 'JaCocoTestReport', 
+            ])
+        }
     }
 
   }
